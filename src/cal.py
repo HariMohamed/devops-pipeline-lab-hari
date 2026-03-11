@@ -1,31 +1,6 @@
 import tkinter as tk
 from tkinter import font
-from typing import Union
-
-Number = Union[int, float]
-
-
-class Calculator:
-    """A simple calculator supporting basic arithmetic operations."""
-
-    def add(self, a: Number, b: Number) -> Number:
-        return a + b
-
-    def subtract(self, a: Number, b: Number) -> Number:
-        return a - b
-
-    def multiply(self, a: Number, b: Number) -> Number:
-        return a * b
-
-    def divide(self, a: Number, b: Number) -> float:
-        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
-            raise TypeError("Operands must be numeric")
-        if b == 0:
-            raise ZeroDivisionError("Cannot divide by zero")
-        return a / b
-
-    def __repr__(self) -> str:
-        return "Calculator()"
+from src.Calculator import Calculator
 
 
 class CalculatorApp:
@@ -105,7 +80,7 @@ class CalculatorApp:
                     width=4,
                     height=2,
                     cursor="hand2",
-                    command=lambda l=label: self._on_click(l),
+                    command=lambda lbl=label: self._on_click(lbl),
                 )
                 btn.grid(row=r, column=c, padx=4, pady=4)
 
@@ -141,12 +116,14 @@ class CalculatorApp:
                 # Replace display symbols with Python operators
                 py_expr = (
                     expr.replace("÷", "/")
-                        .replace("×", "*")
-                        .replace("−", "-")
+                    .replace("×", "*")
+                    .replace("−", "-")
                 )
-                result = eval(py_expr, {"__builtins__": None}, {})  # safe here: only digits & operators
+                # safe: only digits & operators
+                result = eval(py_expr, {"__builtins__": None}, {})
                 # Clean up float display
-                result = int(result) if isinstance(result, float) and result.is_integer() else result
+                if isinstance(result, float) and result.is_integer():
+                    result = int(result)
                 self.expression = str(result)
                 self.display_var.set(self.expression)
             except ZeroDivisionError:

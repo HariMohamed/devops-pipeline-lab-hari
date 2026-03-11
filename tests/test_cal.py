@@ -1,9 +1,5 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 import pytest
-from src.cal import Calculator
+from src.Calculator import Calculator
 
 
 @pytest.fixture
