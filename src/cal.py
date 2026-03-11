@@ -73,9 +73,9 @@ class CalculatorApp:
 
         colors = {
             "operator": {"bg": "#f38ba8", "fg": "#1e1e2e", "active": "#eb6e91"},
-            "action":   {"bg": "#585b70", "fg": "#cdd6f4", "active": "#6c6f85"},
-            "number":   {"bg": "#313244", "fg": "#cdd6f4", "active": "#45475a"},
-            "equals":   {"bg": "#a6e3a1", "fg": "#1e1e2e", "active": "#8fd99a"},
+            "action": {"bg": "#585b70", "fg": "#cdd6f4", "active": "#6c6f85"},
+            "number": {"bg": "#313244", "fg": "#cdd6f4", "active": "#45475a"},
+            "equals": {"bg": "#a6e3a1", "fg": "#1e1e2e", "active": "#8fd99a"},
         }
 
         grid_frame = tk.Frame(self.root, bg="#1e1e2e", padx=10, pady=5)
@@ -84,10 +84,13 @@ class CalculatorApp:
         for r, row in enumerate(buttons):
             for c, label in enumerate(row):
                 style = (
-                    "equals"   if label == "=" else
-                    "operator" if label in ("÷", "×", "−", "+") else
-                    "action"   if label in ("C", "±", "%", "⌫") else
-                    "number"
+                    "equals"
+                    if label == "="
+                    else "operator"
+                    if label in ("÷", "×", "−", "+")
+                    else "action"
+                    if label in ("C", "±", "%", "⌫")
+                    else "number"
                 )
                 s = colors[style]
                 btn = tk.Button(
@@ -141,7 +144,7 @@ class CalculatorApp:
                         .replace("×", "*")
                         .replace("−", "-")
                 )
-                result = eval(py_expr)  # safe here: only digits & operators
+                result = eval(py_expr, {"__builtins__": None}, {})  # safe here: only digits & operators
                 # Clean up float display
                 result = int(result) if isinstance(result, float) and result.is_integer() else result
                 self.expression = str(result)
